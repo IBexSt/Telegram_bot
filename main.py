@@ -1,7 +1,38 @@
 import telebot
 from telebot import types
 
+exstasy = 0
+imlive = 0
+secretfriends = 0
+
 bot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
+
+@bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
+def money(message):
+    send_mess = "Хорошо, давай посчитаем exstasy ✏: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol1)
+
+def vol1(message):
+    global exstasy
+    exstasy = str(message.text)
+    send_mess = "Спасибо, теперь imLive: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol2)
+
+
+def vol2(message):
+    global imlive
+    imlive = str(message.text)
+    send_mess = "Спасибо, теперь SecretFriends: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol3)
+
+def vol3(message):
+    global secretfriends
+    secretfriends = str(message.text)
+    end_vol = "У тебя: " + str(exstasy) + str(imlive) + str(secretfriends) + " ?"
+    bot.send_message(message.from_user.id, end_vol)
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -18,9 +49,9 @@ btn4 = types.KeyboardButton('Штрафы')
 btn5 = types.KeyboardButton('Назад')
 markup3.add(btn1, btn2, btn3, btn4, btn5)
 
-markup4 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-btn1 = types.KeyboardButton('Назад')
-markup4.add(btn1)
+#markup4 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+#btn1 = types.KeyboardButton('Назад')
+#markup4.add(btn1)
 
 
 @bot.message_handler(commands=['start', 'help'])
