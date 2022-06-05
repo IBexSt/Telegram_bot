@@ -18,7 +18,7 @@ bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
 
 @bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
 def money(message):
-    send_mess = "Хорошой, давай посчитаем exstasy ✏: "
+    send_mess = "Хорошо, давай посчитаем exstasy ✏: "
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol1)
 
