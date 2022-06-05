@@ -1,17 +1,27 @@
 import telebot
-from telebot import types
+from telebot import types, TeleBot
 
 exstasy = 0
 imlive = 0
 secretfriends = 0
+mydirtyhobbies = 0
+islive = 0
+camcontacts = 0
+vxmodels = 0
+xmodels = 0
 
-bot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
+bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
+
+
+# При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
+
 
 @bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
 def money(message):
-    send_mess = "Хорошо, давай посчитаем exstasy ✏: "
+    send_mess = "Хорошой, давай посчитаем exstasy ✏: "
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol1)
+
 
 def vol1(message):
     global exstasy
@@ -28,11 +38,35 @@ def vol2(message):
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol3)
 
+
 def vol3(message):
     global secretfriends
     secretfriends = str(message.text)
-    end_vol = "У тебя: " + str(exstasy) + str(imlive) + str(secretfriends) + " ?"
-    bot.send_message(message.from_user.id, end_vol)
+    keyboard = types.InlineKeyboardMarkup()
+    key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
+    keyboard.add(key_send)
+    key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
+    keyboard.add(key_edit)
+    end_vol = "Все верно?" + "\nExstasy: " + str(exstasy) + "\nImLivE: " + str(imlive) + "\nSecretFriends: " + str(
+        secretfriends)
+    bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
+
+
+# Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    if call.data == "send":
+        # При нажатии на отправить, будет выводится надпись отправлено и отправляться статистика в админку
+        bot.send_message(call.message.from_user.id, "Статистика успешно отправлена")
+    elif call.data == "edit":
+        exstasy = 0
+        imlive = 0
+        secretfriends = 0
+        bot.send_message(call.message.from_user.id, "Хорошо, заполним данные заново")
+        send_mess = "Давай заново посчитаем exstasy ✏: "
+        bot.send_message(call.chat.id, send_mess)
+        bot.register_next_step_handler(call.message, vol1)
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -49,9 +83,10 @@ btn4 = types.KeyboardButton('Штрафы')
 btn5 = types.KeyboardButton('Назад')
 markup3.add(btn1, btn2, btn3, btn4, btn5)
 
-#markup4 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-#btn1 = types.KeyboardButton('Назад')
-#markup4.add(btn1)
+
+# markup4 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+# btn1 = types.KeyboardButton('Назад')
+# markup4.add(btn1)
 
 
 @bot.message_handler(commands=['start', 'help'])
