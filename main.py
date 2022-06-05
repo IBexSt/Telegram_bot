@@ -4,6 +4,7 @@ from telebot import types
 exstasy = 0
 imlive = 0
 secretfriends = 0
+xmodels = 0
 
 bot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
 
