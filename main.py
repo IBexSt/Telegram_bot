@@ -58,14 +58,11 @@ def vol3(message):
 def callback_worker(call):
     if call.data == "send":
         # При нажатии на отправить, будет выводится надпись отправлено и отправляться статистика в админку
-        bot.send_message(call.message.from_user.id, "Статистика успешно отправлена")
+        bot.send_message(call.message.chat.id, "Статистика успешно отправлена")
     elif call.data == "edit":
-        exstasy = 0
-        imlive = 0
-        secretfriends = 0
-        bot.send_message(call.message.from_user.id, "Хорошо, заполним данные заново")
-        send_mess = "Давай заново посчитаем exstasy ✏: "
-        bot.send_message(call.chat.id, send_mess)
+        bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
+        send_mess = "Давай посчитаем exstasy ✏: "
+        bot.send_message(call.message.chat.id, send_mess)
         bot.register_next_step_handler(call.message, vol1)
 
 
