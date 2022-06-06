@@ -25,7 +25,7 @@ def money(message):
 
 def vol1(message):
     global exstasy
-    exstasy = str(message.text)
+    exstasy = message.text.isalpha()
     send_mess = "Спасибо, теперь imLive: "
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol2)
@@ -33,22 +33,57 @@ def vol1(message):
 
 def vol2(message):
     global imlive
-    imlive = str(message.text)
-    send_mess = "Спасибо, теперь SecretFriends: "
+    imlive = message.text
+    send_mess = "Спасибо, теперь MyDirtyHobbies: "
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol3)
 
 
 def vol3(message):
+    global mydirtyhobbies
+    mydirtyhobbies = message.text
+    send_mess = "Спасибо, теперь IsLive: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol4)
+
+def vol4(message):
+    global islive
+    islive = message.text
+    send_mess = "Спасибо, теперь CamContacts: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol5)
+
+def vol5(message):
+    global camcontacts
+    camcontacts = message.text
+    send_mess = "Спасибо, теперь VxModels: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol6)
+
+def vol6(message):
+    global vxmodels
+    vxmodels = message.text
+    send_mess = "Спасибо, теперь Xmodels: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol7)
+
+def vol7(message):
+    global xmodels
+    xmodels = message.text
+    send_mess = "Спасибо, теперь SecretFriends: "
+    bot.send_message(message.chat.id, send_mess)
+    bot.register_next_step_handler(message, vol8)
+
+
+def vol8(message):
     global secretfriends
-    secretfriends = str(message.text)
+    secretfriends = message.text
     keyboard = types.InlineKeyboardMarkup()
     key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
     keyboard.add(key_send)
     key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
     keyboard.add(key_edit)
-    end_vol = "Все верно?" + "\nExstasy: " + str(exstasy) + "\nImLivE: " + str(imlive) + "\nSecretFriends: " + str(
-        secretfriends)
+    end_vol = "Все верно?" + "\nExstasy: " + str(exstasy) + "\nImLivE: " + str(imlive) + "\nSecretFriends: " + str(secretfriends) + "\nIsLive: " + str(islive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXModels: " + str(xmodels)
     bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
 
 
