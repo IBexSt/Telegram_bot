@@ -14,8 +14,6 @@ bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
 
 
 # При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
-
-
 @bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
 def money(message):
     send_mess = "Хорошо, давай посчитаем exstasy ✏: "
@@ -25,76 +23,114 @@ def money(message):
 
 def vol1(message):
     global exstasy
-    exstasy = message.text.isalpha()
-    send_mess = "Спасибо, теперь imLive: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol2)
+# message.text.isdigit(): - Проверка на цифровой ввод целых чисел
+    exstasy = message.text
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь ImLive: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol2)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol1)
 
 
 def vol2(message):
     global imlive
     imlive = message.text
-    send_mess = "Спасибо, теперь MyDirtyHobbies: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol3)
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь MyDirtyHobbies: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol3)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol2)
 
 
 def vol3(message):
     global mydirtyhobbies
     mydirtyhobbies = message.text
-    send_mess = "Спасибо, теперь IsLive: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol4)
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь IsLive €: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol4)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol3)
+
 
 def vol4(message):
     global islive
     islive = message.text
-    send_mess = "Спасибо, теперь CamContacts: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol5)
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь CamContacts: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol5)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol4)
+
 
 def vol5(message):
     global camcontacts
     camcontacts = message.text
-    send_mess = "Спасибо, теперь VxModels: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol6)
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь VxModels: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol6)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol5)
+
 
 def vol6(message):
     global vxmodels
     vxmodels = message.text
-    send_mess = "Спасибо, теперь Xmodels: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol7)
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь Xmodels: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol7)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol6)
+
 
 def vol7(message):
     global xmodels
     xmodels = message.text
-    send_mess = "Спасибо, теперь SecretFriends: "
-    bot.send_message(message.chat.id, send_mess)
-    bot.register_next_step_handler(message, vol8)
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь SecretFriends: "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol8)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol7)
 
 
 def vol8(message):
     global secretfriends
     secretfriends = message.text
-    keyboard = types.InlineKeyboardMarkup()
-    key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
-    keyboard.add(key_send)
-    key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
-    keyboard.add(key_edit)
-    end_vol = "Все верно?" + "\nExstasy: " + str(exstasy) + "\nImLivE: " + str(imlive) + "\nSecretFriends: " + str(secretfriends) + "\nIsLive: " + str(islive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXModels: " + str(xmodels)
-    bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
-
+    if message.text.isdigit():
+        keyboard = types.InlineKeyboardMarkup()
+        key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
+        keyboard.add(key_send)
+        key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
+        keyboard.add(key_edit)
+        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nSecretFriends: " + str(secretfriends) + "\nIsLive (€): " + str(islive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXModels: " + str(xmodels)
+        bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol8)
 
 # Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
     if call.data == "send":
-        # При нажатии на отправить, будет выводится надпись отправлено и отправляться статистика в админку
+        bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Статистика успешно отправлена")
     elif call.data == "edit":
+# Ответ клиентскому приложению что информация получена
+        bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
         send_mess = "Давай посчитаем exstasy ✏: "
         bot.send_message(call.message.chat.id, send_mess)
