@@ -1,4 +1,4 @@
-import telebot
+import telebot, time
 from telebot import types, TeleBot
 
 exstasy = 0
@@ -12,6 +12,7 @@ xmodels = 0
 
 bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
 
+tconv = lambda x: time.strftime("%d.%m.%Y", time.localtime(x)) #Конвертация даты в читабельный вид (Переменная time_send выводит в формате 09.06.2022)
 
 # При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
 @bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
@@ -23,7 +24,6 @@ def money(message):
 
 def vol1(message):
     global exstasy
-# message.text.isdigit(): - Проверка на цифровой ввод целых чисел
     exstasy = message.text
     if message.text.isdigit():
         send_mess = "Спасибо, теперь ImLive: "
@@ -117,6 +117,7 @@ def vol8(message):
         keyboard.add(key_edit)
         end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nSecretFriends: " + str(secretfriends) + "\nIsLive (€): " + str(islive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXModels: " + str(xmodels)
         bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
+        time_send = (tconv(message.date))
     else:
         bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
         bot.register_next_step_handler(message, vol8)
