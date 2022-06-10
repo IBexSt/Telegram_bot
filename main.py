@@ -1,4 +1,4 @@
-import telebot, time
+import telebot, time, sqlite3
 from telebot import types, TeleBot
 
 exstasy = 0
@@ -9,8 +9,18 @@ islive = 0
 camcontacts = 0
 vxmodels = 0
 xmodels = 0
+finmoney = 0
+time_send = 0
 
 bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
+
+conn = sqlite3.connect('payouts.db', check_same_thread=False)
+cursor = conn.cursor()
+
+def db_table_val(date: str, nickname: str, money: str):
+    cursor.execute('INSERT INTO Models (date, nickname, money) VALUES (?, ?, ?)', (date, nickname, money))
+    conn.commit()
+
 
 tconv = lambda x: time.strftime("%d.%m.%Y", time.localtime(x)) #Конвертация даты в читабельный вид (Переменная time_send выводит в формате 09.06.2022)
 
@@ -108,6 +118,7 @@ def vol7(message):
 
 def vol8(message):
     global secretfriends
+    global time_send
     secretfriends = message.text
     if message.text.isdigit():
         keyboard = types.InlineKeyboardMarkup()
@@ -115,9 +126,9 @@ def vol8(message):
         keyboard.add(key_send)
         key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
         keyboard.add(key_edit)
-        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nSecretFriends: " + str(secretfriends) + "\nIsLive (€): " + str(islive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXModels: " + str(xmodels)
+        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nIsLive (€): " + str(islive) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXmodels: " + str(xmodels) + "\nSecretFriends: " + str(secretfriends)
         bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
-        time_send = (tconv(message.date))
+        time_send = tconv(message.date)
     else:
         bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
         bot.register_next_step_handler(message, vol8)
@@ -126,16 +137,24 @@ def vol8(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
+    global finmoney
     if call.data == "send":
         bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Статистика успешно отправлена")
+        finmoney = int(exstasy) + int(imlive) + int(mydirtyhobbies) + int(islive) + int(secretfriends) + int(camcontacts) + int(vxmodels) + int(xmodels)
+        modelsmoney = int(finmoney) / 2
+        bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(modelsmoney) + "$")
+        m_date = time_send
+        m_nick = call.from_user.username
+        m_money = finmoney
+        db_table_val(date=m_date, nickname=m_nick, money=m_money)
     elif call.data == "edit":
-# Ответ клиентскому приложению что информация получена
-        bot.answer_callback_query(call.id)
+        bot.answer_callback_query(call.id) # Ответ клиентскому приложению что информация получена
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
         send_mess = "Давай посчитаем exstasy ✏: "
         bot.send_message(call.message.chat.id, send_mess)
         bot.register_next_step_handler(call.message, vol1)
+
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -151,11 +170,6 @@ btn3 = types.KeyboardButton('Хочу уйти на удаленную рабо�
 btn4 = types.KeyboardButton('Штрафы')
 btn5 = types.KeyboardButton('Назад')
 markup3.add(btn1, btn2, btn3, btn4, btn5)
-
-
-# markup4 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-# btn1 = types.KeyboardButton('Назад')
-# markup4.add(btn1)
 
 
 @bot.message_handler(commands=['start', 'help'])
