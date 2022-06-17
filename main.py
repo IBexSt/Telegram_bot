@@ -1,3 +1,5 @@
+from datetime import datetime
+from datetime import date
 import telebot, time, sqlite3
 from telebot import types, TeleBot
 
@@ -9,15 +11,27 @@ islive = 0
 camcontacts = 0
 vxmodels = 0
 xmodels = 0
+jasmin = 0
 finmoney = 0
 time_send = 0
 
+today = date.today()
+firstday = date.today().replace(day=1)
+#currentday = today.strftime('%d.%m.%Y')
+#firstdaymonth = today.strftime('01.%m.%Y')
+#dcurrentday = datetime.strptime(currentday, '%d.%m.%Y')
+#dfirstdaymonth = datetime.strptime(firstdaymonth, '%d.%m.%Y')
+
+#print(firstday)
+#print(type(firstday))
+
+
 bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
 
-conn = sqlite3.connect('payouts.db', check_same_thread=False)
+conn = sqlite3.connect('payouts.db', check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
 cursor = conn.cursor()
 
-def db_table_val(date: str, nickname: str, money: str):
+def db_table_val(date: date, nickname: str, money: str):
     cursor.execute('INSERT INTO Models (date, nickname, money) VALUES (?, ?, ?)', (date, nickname, money))
     conn.commit()
 
@@ -27,16 +41,19 @@ tconv = lambda x: time.strftime("%d.%m.%Y", time.localtime(x)) #Конверта
 # При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
 @bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
 def money(message):
-    send_mess = "Хорошо, давай посчитаем exstasy ✏: "
+
+    send_mess = "Хорошо, давай посчитаем Exstasy (Euro): "
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol1)
+
+
 
 
 def vol1(message):
     global exstasy
     exstasy = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь ImLive: "
+        send_mess = "Спасибо, теперь ImLive (Dollar): "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol2)
     else:
@@ -44,10 +61,11 @@ def vol1(message):
         bot.register_next_step_handler(message, vol1)
 
 
+
 def vol2(message):
     global imlive
     imlive = message.text
-    if message.text.isdigit():
+    if message.text.isnumeric():
         send_mess = "Спасибо, теперь MyDirtyHobbies: "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol3)
@@ -59,8 +77,8 @@ def vol2(message):
 def vol3(message):
     global mydirtyhobbies
     mydirtyhobbies = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь IsLive €: "
+    if message.text.isnumeric():
+        send_mess = "Спасибо, теперь IsLive (Euro): "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol4)
     else:
@@ -71,8 +89,8 @@ def vol3(message):
 def vol4(message):
     global islive
     islive = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь CamContacts: "
+    if message.text.isnumeric():
+        send_mess = "Спасибо, теперь CamContacts (Dollar): "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol5)
     else:
@@ -83,8 +101,8 @@ def vol4(message):
 def vol5(message):
     global camcontacts
     camcontacts = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь VxModels: "
+    if message.text.isnumeric():
+        send_mess = "Спасибо, теперь VxModels (Euro): "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol6)
     else:
@@ -95,8 +113,8 @@ def vol5(message):
 def vol6(message):
     global vxmodels
     vxmodels = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь Xmodels: "
+    if message.text.isnumeric():
+        send_mess = "Спасибо, теперь Xmodels (): "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol7)
     else:
@@ -107,8 +125,8 @@ def vol6(message):
 def vol7(message):
     global xmodels
     xmodels = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь SecretFriends: "
+    if message.text.isnumeric():
+        send_mess = "Спасибо, теперь SecretFriends (credits): "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol8)
     else:
@@ -117,6 +135,17 @@ def vol7(message):
 
 
 def vol8(message):
+    global jasmin
+    jasmin = message.text
+    if message.text.isdigit():
+        send_mess = "Спасибо, теперь JasminLive (Dollar): "
+        bot.send_message(message.chat.id, send_mess)
+        bot.register_next_step_handler(message, vol9)
+    else:
+        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+        bot.register_next_step_handler(message, vol8)
+
+def vol9(message):
     global secretfriends
     global time_send
     secretfriends = message.text
@@ -126,13 +155,12 @@ def vol8(message):
         keyboard.add(key_send)
         key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
         keyboard.add(key_edit)
-        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nIsLive (€): " + str(islive) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXmodels: " + str(xmodels) + "\nSecretFriends: " + str(secretfriends)
+        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nIsLive: " + str(islive) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXmodels: " + str(xmodels) + "\nSecretFriends: " + str(secretfriends) + "\nJasminLive: " + str(jasmin)
         bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
         time_send = tconv(message.date)
     else:
         bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
         bot.register_next_step_handler(message, vol8)
-
 # Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -141,27 +169,38 @@ def callback_worker(call):
     if call.data == "send":
         bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Статистика успешно отправлена")
-        finmoney = int(exstasy) + int(imlive) + int(mydirtyhobbies) + int(islive) + int(secretfriends) + int(camcontacts) + int(vxmodels) + int(xmodels)
+        secretfriendsdollar = int(secretfriends) / 2
+        finmoney = int(exstasy) + int(imlive) + int(mydirtyhobbies) + int(islive) + int(secretfriendsdollar) + int(camcontacts) + int(vxmodels) + int(xmodels) + int(jasmin)
         modelsmoney = int(finmoney) / 2
         bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(modelsmoney) + "$")
-        m_date = time_send
+        m_date = today
         m_nick = call.from_user.username
         m_money = finmoney
         db_table_val(date=m_date, nickname=m_nick, money=m_money)
+        print(type(finmoney))
     elif call.data == "edit":
         bot.answer_callback_query(call.id) # Ответ клиентскому приложению что информация получена
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
-        send_mess = "Давай посчитаем exstasy ✏: "
+        send_mess = "Давай посчитаем Exstasy ✏: "
         bot.send_message(call.message.chat.id, send_mess)
         bot.register_next_step_handler(call.message, vol1)
+
+
+@bot.message_handler(func=lambda message: message.text == 'Моя зарплата 💰')
+def modelsmoney(message):
+    Nik = message.from_user.username
+    result = conn.execute(f"SELECT Money FROM Models WHERE Nickname = '{Nik}' AND Date BETWEEN '{firstday}' AND '{today}' ")
+    print(result.fetchall())
+
 
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Указать заработок за день 💸')
-btn2 = types.KeyboardButton('Узнать о бонусах 💰')
+btn2 = types.KeyboardButton('Узнать о бонусах 🍀')
 btn3 = types.KeyboardButton('FAQ ❓')
-markup.add(btn1, btn2, btn3)
+btn4 = types.KeyboardButton('Моя зарплата 💰')
+markup.add(btn1, btn2, btn3, btn4)
 
 markup3 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Можно ли курить перед камерой?')
@@ -175,7 +214,7 @@ markup3.add(btn1, btn2, btn3, btn4, btn5)
 @bot.message_handler(commands=['start', 'help'])
 def start(message):
     username = message.from_user.username
-    bot.send_message(message.chat.id, "Давай начнем!", reply_markup=markup)
+#    bot.send_message(message.chat.id, "Давай начнем!", reply_markup=markup)
     send_mess = f"Привет, {username}! Я твой личный помощник!"
     bot.send_message(message.chat.id, send_mess, reply_markup=markup)
 
