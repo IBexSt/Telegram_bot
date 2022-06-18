@@ -1,4 +1,3 @@
-from datetime import datetime
 from datetime import date
 import telebot, time, sqlite3
 from telebot import types, TeleBot
@@ -15,21 +14,16 @@ jasmin = 0
 finmoney = 0
 time_send = 0
 
+
 today = date.today()
 firstday = date.today().replace(day=1)
-#currentday = today.strftime('%d.%m.%Y')
-#firstdaymonth = today.strftime('01.%m.%Y')
-#dcurrentday = datetime.strptime(currentday, '%d.%m.%Y')
-#dfirstdaymonth = datetime.strptime(firstdaymonth, '%d.%m.%Y')
-
-#print(firstday)
-#print(type(firstday))
 
 
 bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
 
 conn = sqlite3.connect('payouts.db', check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
 cursor = conn.cursor()
+
 
 def db_table_val(date: date, nickname: str, money: str):
     cursor.execute('INSERT INTO Models (date, nickname, money) VALUES (?, ?, ?)', (date, nickname, money))
@@ -47,121 +41,112 @@ def money(message):
     bot.register_next_step_handler(message, vol1)
 
 
-
-
 def vol1(message):
     global exstasy
-    exstasy = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь ImLive (Dollar): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        exstasy = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь ImLive (Euro): ")
         bot.register_next_step_handler(message, vol2)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol1)
-
 
 
 def vol2(message):
     global imlive
-    imlive = message.text
-    if message.text.isnumeric():
-        send_mess = "Спасибо, теперь MyDirtyHobbies: "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        imlive = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь MyDirtyHobbies (Euro): ")
         bot.register_next_step_handler(message, vol3)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol2)
 
 
 def vol3(message):
     global mydirtyhobbies
-    mydirtyhobbies = message.text
-    if message.text.isnumeric():
-        send_mess = "Спасибо, теперь IsLive (Euro): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        mydirtyhobbies = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь IsLive (Euro): ")
         bot.register_next_step_handler(message, vol4)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol3)
 
 
 def vol4(message):
     global islive
-    islive = message.text
-    if message.text.isnumeric():
-        send_mess = "Спасибо, теперь CamContacts (Dollar): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        islive = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь CamContacts (Dollar): ")
         bot.register_next_step_handler(message, vol5)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol4)
 
 
 def vol5(message):
     global camcontacts
-    camcontacts = message.text
-    if message.text.isnumeric():
-        send_mess = "Спасибо, теперь VxModels (Euro): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        camcontacts = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь VxModels (Euro): ")
         bot.register_next_step_handler(message, vol6)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol5)
 
 
 def vol6(message):
     global vxmodels
-    vxmodels = message.text
-    if message.text.isnumeric():
-        send_mess = "Спасибо, теперь Xmodels (): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        vxmodels = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь Xmodels (Dollar): ")
         bot.register_next_step_handler(message, vol7)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol6)
 
 
 def vol7(message):
     global xmodels
-    xmodels = message.text
-    if message.text.isnumeric():
-        send_mess = "Спасибо, теперь SecretFriends (credits): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        xmodels = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь JasminLive (Dollar): ")
         bot.register_next_step_handler(message, vol8)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol7)
 
 
 def vol8(message):
     global jasmin
-    jasmin = message.text
-    if message.text.isdigit():
-        send_mess = "Спасибо, теперь JasminLive (Dollar): "
-        bot.send_message(message.chat.id, send_mess)
+    try:
+        jasmin = float(message.text)
+        bot.send_message(message.chat.id, "Спасибо, теперь SecretFriends (Dollar): ")
         bot.register_next_step_handler(message, vol9)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol8)
+
 
 def vol9(message):
     global secretfriends
     global time_send
-    secretfriends = message.text
-    if message.text.isdigit():
+    try:
+        secretfriends = float(message.text)
         keyboard = types.InlineKeyboardMarkup()
         key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
         keyboard.add(key_send)
         key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
         keyboard.add(key_edit)
-        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + "\nImLive: " + str(imlive) + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + "\nIsLive: " + str(islive) + "\nCamContacts: " + str(camcontacts) + "\nVxModels: " + str(vxmodels) + "\nXmodels: " + str(xmodels) + "\nSecretFriends: " + str(secretfriends) + "\nJasminLive: " + str(jasmin)
+        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + (" €")  + "\nImLive: " + str(imlive) + (" €") + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + (" €") + "\nIsLive: " + str(islive) + (" €") + "\nCamContacts: " + str(camcontacts) + (" $") + "\nVxModels: " + str(vxmodels) + (" €") + "\nXmodels: " + str(xmodels) + (" $") + "\nSecretFriends: " + str(secretfriends) + (" $") + "\nJasminLive: " + str(jasmin) + (" $")
         bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
         time_send = tconv(message.date)
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста используй целые числа, например, если на сайте ты заработала 12,9. То округли до 12.")
+    except ValueError:
+        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol8)
 # Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
@@ -170,14 +155,14 @@ def callback_worker(call):
         bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Статистика успешно отправлена")
         secretfriendsdollar = int(secretfriends) / 2
-        finmoney = int(exstasy) + int(imlive) + int(mydirtyhobbies) + int(islive) + int(secretfriendsdollar) + int(camcontacts) + int(vxmodels) + int(xmodels) + int(jasmin)
-        modelsmoney = int(finmoney) / 2
-        bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(modelsmoney) + "$")
+        finmoney = float(exstasy) + float(imlive) + float(mydirtyhobbies) + float(islive) + float(secretfriendsdollar) + float(camcontacts) + float(vxmodels) + float(xmodels) + float(jasmin)
+        modelsmoney = float(finmoney) / 2
+        rmodelsmoney = round(modelsmoney)
+        bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(rmodelsmoney) + "$")
         m_date = today
         m_nick = call.from_user.username
         m_money = finmoney
         db_table_val(date=m_date, nickname=m_nick, money=m_money)
-        print(type(finmoney))
     elif call.data == "edit":
         bot.answer_callback_query(call.id) # Ответ клиентскому приложению что информация получена
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
@@ -189,10 +174,11 @@ def callback_worker(call):
 @bot.message_handler(func=lambda message: message.text == 'Моя зарплата 💰')
 def modelsmoney(message):
     Nik = message.from_user.username
-    result = conn.execute(f"SELECT Money FROM Models WHERE Nickname = '{Nik}' AND Date BETWEEN '{firstday}' AND '{today}' ")
-    print(result.fetchall())
-
-
+    cursor.execute(f"SELECT Money FROM Models WHERE Nickname = '{Nik}' AND Date BETWEEN '{firstday}' AND '{today}' ")
+    records = cursor.fetchall()
+    summa = sum(sum(records, ()))
+    rsumma = round(summa)
+    bot.send_message(message.from_user.id, "За этот месяц ты заработала: " + str(rsumma) + "$")
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -255,7 +241,7 @@ def foo6(message):
     bot.send_message(message.chat.id, final_message, reply_markup=markup)
 
 
-@bot.message_handler(func=lambda message: message.text == "Узнать о бонусах 💰")
+@bot.message_handler(func=lambda message: message.text == "Узнать о бонусах 🍀")
 def foo7(message):
     final_message = "У нас действует предложение, если твоя подруга хочет вступить к нам в команду, то мы с радостью рассмотрим ее кандидатуру, а тебе будет положен бонус 5 000₽. Но есть одно условие, твоя подруга должна пройти испытательный срок равный 1 месяцу. "
     bot.send_message(message.chat.id, final_message, parse_mode='html', reply_markup=markup)
