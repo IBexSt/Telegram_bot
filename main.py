@@ -13,7 +13,7 @@ xmodels = 0
 jasmin = 0
 finmoney = 0
 time_send = 0
-
+rsumma =0
 
 today = date.today()
 firstday = date.today().replace(day=1)
@@ -45,7 +45,7 @@ def vol1(message):
     global exstasy
     try:
         exstasy = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь ImLive (Euro): ")
+        bot.send_message(message.chat.id, "Спасибо, теперь ImLive (Dollar): ")
         bot.register_next_step_handler(message, vol2)
     except ValueError:
         bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
@@ -122,7 +122,7 @@ def vol8(message):
     global jasmin
     try:
         jasmin = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь SecretFriends (Dollar): ")
+        bot.send_message(message.chat.id, "Спасибо, теперь SecretFriends (Credits): ")
         bot.register_next_step_handler(message, vol9)
     except ValueError:
         bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
@@ -139,7 +139,7 @@ def vol9(message):
         keyboard.add(key_send)
         key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
         keyboard.add(key_edit)
-        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + (" €")  + "\nImLive: " + str(imlive) + (" €") + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + (" €") + "\nIsLive: " + str(islive) + (" €") + "\nCamContacts: " + str(camcontacts) + (" $") + "\nVxModels: " + str(vxmodels) + (" €") + "\nXmodels: " + str(xmodels) + (" $") + "\nSecretFriends: " + str(secretfriends) + (" $") + "\nJasminLive: " + str(jasmin) + (" $")
+        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + (" €")  + "\nImLive: " + str(imlive) + (" €") + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + (" €") + "\nIsLive: " + str(islive) + (" €") + "\nCamContacts: " + str(camcontacts) + (" $") + "\nVxModels: " + str(vxmodels) + (" €") + "\nXmodels: " + str(xmodels) + (" $") + "\nSecretFriends: " + str(secretfriends) + (" Credits") + "\nJasminLive: " + str(jasmin) + (" $")
         bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
         time_send = tconv(message.date)
     except ValueError:
@@ -173,13 +173,29 @@ def callback_worker(call):
 
 @bot.message_handler(func=lambda message: message.text == 'Моя зарплата 💰')
 def modelsmoney(message):
+    global rsumma
     Nik = message.from_user.username
     cursor.execute(f"SELECT Money FROM Models WHERE Nickname = '{Nik}' AND Date BETWEEN '{firstday}' AND '{today}' ")
     records = cursor.fetchall()
     summa = sum(sum(records, ()))
-    rsumma = round(summa)
+    rsumma = round(summa) / 2
     bot.send_message(message.from_user.id, "За этот месяц ты заработала: " + str(rsumma) + "$")
 
+
+admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+btn1 = types.KeyboardButton('Ирина Худякова')
+btn2 = types.KeyboardButton('Вторая модель')
+admin.add(btn1, btn2)
+
+
+@bot.message_handler(func=lambda message: message.text == "Ирина Худякова")
+def ikhudakova(message):
+    global rsumma
+    cursor.execute(f"SELECT Money FROM Models WHERE Nickname = 'Aarriiaannaz' AND Date BETWEEN '{firstday}' AND '{today}' ")
+    records = cursor.fetchall()
+    summa = sum(sum(records, ()))
+    rsumma = round(summa) / 2
+    bot.send_message(message.from_user.id, "Ирина заработала в этом месяце: " + str(rsumma) + "$")
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Указать заработок за день 💸')
@@ -198,12 +214,16 @@ markup3.add(btn1, btn2, btn3, btn4, btn5)
 
 
 @bot.message_handler(commands=['start', 'help'])
-def start(message):
+def start(message, settings=None):
     username = message.from_user.username
-#    bot.send_message(message.chat.id, "Давай начнем!", reply_markup=markup)
     send_mess = f"Привет, {username}! Я твой личный помощник!"
     bot.send_message(message.chat.id, send_mess, reply_markup=markup)
-
+    keyboard = types.InlineKeyboardMarkup()
+    if message.from_user.username == 'ibexstrt':
+        bot.send_message(message.chat.id, "Привет Босс", reply_markup=admin)
+    else:
+        bot.send_message(message.chat.id, send_mess, reply_markup=markup)
+        
 
 @bot.message_handler(func=lambda message: message.text == 'FAQ ❓')
 def foo(message):
