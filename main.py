@@ -181,10 +181,10 @@ def modelsmoney(message):
     rsumma = round(summa) / 2
     bot.send_message(message.from_user.id, "За этот месяц ты заработала: " + str(rsumma) + "$")
 
-
+# Вывод заработной платы моделей для Администратора
 admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Ирина Худякова')
-btn2 = types.KeyboardButton('Вторая модель')
+btn2 = types.KeyboardButton('Ольга Клебан')
 admin.add(btn1, btn2)
 
 
@@ -196,6 +196,17 @@ def ikhudakova(message):
     summa = sum(sum(records, ()))
     rsumma = round(summa) / 2
     bot.send_message(message.from_user.id, "Ирина заработала в этом месяце: " + str(rsumma) + "$")
+
+
+@bot.message_handler(func=lambda message: message.text == "Ольга Клебан")
+def ikhudakova(message):
+    global rsumma
+    cursor.execute(f"SELECT Money FROM Models WHERE Nickname = 'OlgaKleban' AND Date BETWEEN '{firstday}' AND '{today}' ")
+    records = cursor.fetchall()
+    summa = sum(sum(records, ()))
+    rsumma = round(summa)
+    bot.send_message(message.from_user.id, "Оля заработала в этом месяце: " + str(rsumma) + "$")
+
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Указать заработок за день 💸')
