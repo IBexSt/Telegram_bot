@@ -13,7 +13,9 @@ xmodels = 0
 jasmin = 0
 finmoney = 0
 time_send = 0
-rsumma =0
+rsumma = 0
+shtraf = 0
+
 
 today = date.today()
 firstday = date.today().replace(day=1)
@@ -30,10 +32,10 @@ def db_table_val(date: date, nickname: str, money: str):
     conn.commit()
 
 
-tconv = lambda x: time.strftime("%d.%m.%Y", time.localtime(x)) #Конвертация даты в читабельный вид (Переменная time_send выводит в формате 09.06.2022)
+tconv = lambda x: time.strftime("%d.%m.%Y", time.localtime(x))# Конвертация даты в читабельный вид (Переменная time_send выводит в формате 09.06.2022)
 
-# При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
-@bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
+
+@bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸') # При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
 def money(message):
 
     send_mess = "Хорошо, давай посчитаем Exstasy (Euro): "
@@ -145,10 +147,9 @@ def vol9(message):
     except ValueError:
         bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol8)
-# Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
 
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(func=lambda call: True)# Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
 def callback_worker(call):
     global finmoney
     if call.data == "send":
@@ -161,10 +162,10 @@ def callback_worker(call):
         bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(rmodelsmoney) + "$")
         m_date = today
         m_nick = call.from_user.username
-        m_money = finmoney
+        m_money = rmodelsmoney
         db_table_val(date=m_date, nickname=m_nick, money=m_money)
     elif call.data == "edit":
-        bot.answer_callback_query(call.id) # Ответ клиентскому приложению что информация получена
+        bot.answer_callback_query(call.id)# Ответ клиентскому приложению что информация получена
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
         send_mess = "Давай посчитаем Exstasy ✏: "
         bot.send_message(call.message.chat.id, send_mess)
@@ -178,13 +179,14 @@ def modelsmoney(message):
     cursor.execute(f"SELECT Money FROM Models WHERE Nickname = '{Nik}' AND Date BETWEEN '{firstday}' AND '{today}' ")
     records = cursor.fetchall()
     summa = sum(sum(records, ()))
-    rsumma = round(summa) / 2
+    rsumma = round(summa)
     bot.send_message(message.from_user.id, "За этот месяц ты заработала: " + str(rsumma) + "$")
 
-# Вывод заработной платы моделей для Администратора
-admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+
+admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)# Вывод заработной платы моделей для Администратора
 btn1 = types.KeyboardButton('Ирина Худякова')
 btn2 = types.KeyboardButton('Ольга Клебан')
+btn3 = types.KeyboardButton('Выписать штраф')
 admin.add(btn1, btn2)
 
 
@@ -194,18 +196,28 @@ def ikhudakova(message):
     cursor.execute(f"SELECT Money FROM Models WHERE Nickname = 'Aarriiaannaz' AND Date BETWEEN '{firstday}' AND '{today}' ")
     records = cursor.fetchall()
     summa = sum(sum(records, ()))
-    rsumma = round(summa) / 2
+    rsumma = round(summa)
     bot.send_message(message.from_user.id, "Ирина заработала в этом месяце: " + str(rsumma) + "$")
 
 
 @bot.message_handler(func=lambda message: message.text == "Ольга Клебан")
-def ikhudakova(message):
+def kleban(message):
     global rsumma
     cursor.execute(f"SELECT Money FROM Models WHERE Nickname = 'OlgaKleban' AND Date BETWEEN '{firstday}' AND '{today}' ")
     records = cursor.fetchall()
     summa = sum(sum(records, ()))
     rsumma = round(summa)
     bot.send_message(message.from_user.id, "Оля заработала в этом месяце: " + str(rsumma) + "$")
+
+
+@bot.message_handler(func=lambda message: message.text == "Ирина Худякова")
+def shtraf(message):
+    global shtraf
+    cursor.execute(f"SELECT Money FROM Models WHERE Nickname = 'Aarriiaannaz' AND Date BETWEEN '{firstday}' AND '{today}' ")
+    records = cursor.fetchall()
+    summa = sum(sum(records, ()))
+    rsumma = round(summa)
+    bot.send_message(message.from_user.id, "Ирина заработала в этом месяце: " + str(rsumma) + "$")
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -227,14 +239,13 @@ markup3.add(btn1, btn2, btn3, btn4, btn5)
 @bot.message_handler(commands=['start', 'help'])
 def start(message, settings=None):
     username = message.from_user.username
-    send_mess = f"Привет, {username}! Я твой личный помощник!"
-    bot.send_message(message.chat.id, send_mess, reply_markup=markup)
-    keyboard = types.InlineKeyboardMarkup()
     if message.from_user.username == 'ibexstrt':
         bot.send_message(message.chat.id, "Привет Босс", reply_markup=admin)
     else:
+        send_mess = f"Привет, {username}! Я твой личный помощник! Что будем делать?)"
         bot.send_message(message.chat.id, send_mess, reply_markup=markup)
-        
+        keyboard = types.InlineKeyboardMarkup()
+
 
 @bot.message_handler(func=lambda message: message.text == 'FAQ ❓')
 def foo(message):
