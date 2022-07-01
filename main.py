@@ -15,7 +15,7 @@ finmoney = 0
 time_send = 0
 rsumma = 0
 shtraf = 0
-
+owner = 747983713
 
 today = date.today()
 firstday = date.today().replace(day=1)
@@ -27,8 +27,8 @@ conn = sqlite3.connect('payouts.db', check_same_thread=False, detect_types=sqlit
 cursor = conn.cursor()
 
 
-def db_table_val(date: date, nickname: str, money: str):
-    cursor.execute('INSERT INTO Models (date, nickname, money) VALUES (?, ?, ?)', (date, nickname, money))
+def db_table_val(date: date, nickname: str, money: str, comment: str):
+    cursor.execute('INSERT INTO Models (date, nickname, money, comment) VALUES (?, ?, ?, ?)', (date, nickname, money, comment))
     conn.commit()
 
 
@@ -153,8 +153,10 @@ def vol9(message):
 def callback_worker(call):
     global finmoney
     if call.data == "send":
+        sendler = call.from_user.username
         bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Статистика успешно отправлена")
+        bot.send_message(owner, "Пришла статистика от: " + str(sendler))
         secretfriendsdollar = int(secretfriends) / 2
         finmoney = float(exstasy) + float(imlive) + float(mydirtyhobbies) + float(islive) + float(secretfriendsdollar) + float(camcontacts) + float(vxmodels) + float(xmodels) + float(jasmin)
         modelsmoney = float(finmoney) / 2
@@ -163,7 +165,8 @@ def callback_worker(call):
         m_date = today
         m_nick = call.from_user.username
         m_money = rmodelsmoney
-        db_table_val(date=m_date, nickname=m_nick, money=m_money)
+        comment = "null"
+        db_table_val(date=m_date, nickname=m_nick, money=m_money, comment=comment)
     elif call.data == "edit":
         bot.answer_callback_query(call.id)# Ответ клиентскому приложению что информация получена
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
@@ -183,12 +186,31 @@ def modelsmoney(message):
     bot.send_message(message.from_user.id, "За этот месяц ты заработала: " + str(rsumma) + "$")
 
 
+@bot.message_handler(func=lambda message: message.text == 'Мои штрафы')
+def modelsmoney(message):
+    global shtraf
+    Nik = message.from_user.username
+    cursor.execute(f"SELECT Money, Comment FROM Models WHERE Nickname = '{Nik}' AND Date BETWEEN '{firstday}' AND '{today}' AND Money < 0")
+    records = cursor.fetchall()
+    for row in records:
+        shtrafsend = (str(row[0]) + "$ за " + str(row[1]))
+        print(shtrafsend)
+        bot.send_message(message.from_user.id, shtrafsend)
+
+
 admin = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)# Вывод заработной платы моделей для Администратора
 btn1 = types.KeyboardButton('Ирина Худякова')
 btn2 = types.KeyboardButton('Ольга Клебан')
 btn3 = types.KeyboardButton('Выписать штраф')
-admin.add(btn1, btn2)
+admin.add(btn1, btn2, btn3)
 
+
+#@bot.message_handler(func=lambda message: message.text == "Выписать штраф")
+#def ticket(message, settings=None):
+#    m_date = today
+#    m_nick =
+#   m_money = rmodelsmoney
+#    db_table_val(date=m_date, nickname=m_nick, money=m_money)
 
 @bot.message_handler(func=lambda message: message.text == "Ирина Худякова")
 def ikhudakova(message):
@@ -231,9 +253,10 @@ markup3 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Можно ли курить перед камерой?')
 btn2 = types.KeyboardButton('Я плохо знаю английский, что делать?')
 btn3 = types.KeyboardButton('Хочу уйти на удаленную работу')
-btn4 = types.KeyboardButton('Штрафы')
-btn5 = types.KeyboardButton('Назад')
-markup3.add(btn1, btn2, btn3, btn4, btn5)
+btn4 = types.KeyboardButton('О штрафах')
+btn5 = types.KeyboardButton('Мои штрафы')
+btn6 = types.KeyboardButton('Назад')
+markup3.add(btn1, btn2, btn3, btn4, btn5, btn6)
 
 
 @bot.message_handler(commands=['start', 'help'])
