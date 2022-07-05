@@ -144,6 +144,7 @@ def vol9(message):
         end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + (" €")  + "\nImLive: " + str(imlive) + (" €") + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + (" €") + "\nIsLive: " + str(islive) + (" €") + "\nCamContacts: " + str(camcontacts) + (" $") + "\nVxModels: " + str(vxmodels) + (" €") + "\nXmodels: " + str(xmodels) + (" $") + "\nSecretFriends: " + str(secretfriends) + (" Credits") + "\nJasminLive: " + str(jasmin) + (" $")
         bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
         time_send = tconv(message.date)
+        end_vol = 0
     except ValueError:
         bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
         bot.register_next_step_handler(message, vol8)
