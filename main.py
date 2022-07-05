@@ -10,13 +10,13 @@ camcontacts = 0
 vxmodels = 0
 xmodels = 0
 
-bot: TeleBot = telebot.TeleBot('5319859431:AAH9lk9ibeuA8tWzcxFZ7A963hZXTA-ypSQ')
+bot: TeleBot = telebot.TeleBot('Ключ изменен для демонстрации')
 
 
 # При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
-@bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸')
+@bot.message_handler(func=lambda message: message.text == 'Сообщение изменено для демонстрации')
 def money(message):
-    send_mess = "Хорошо, давай посчитаем exstasy ✏: "
+    send_mess = "Сообщение изменено для демонстрации "
     bot.send_message(message.chat.id, send_mess)
     bot.register_next_step_handler(message, vol1)
 
@@ -26,7 +26,7 @@ def vol1(message):
 # message.text.isdigit(): - Проверка на цифровой ввод целых чисел
     exstasy = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь ImLive: "
+        send_mess = "Сообщение изменено для демонстрации"
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol2)
     else:
@@ -38,7 +38,7 @@ def vol2(message):
     global imlive
     imlive = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь MyDirtyHobbies: "
+        send_mess = "Сообщение изменено для демонстрации"
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol3)
     else:
@@ -50,7 +50,7 @@ def vol3(message):
     global mydirtyhobbies
     mydirtyhobbies = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь IsLive €: "
+        send_mess = "Сообщение изменено для демонстрации "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol4)
     else:
@@ -62,7 +62,7 @@ def vol4(message):
     global islive
     islive = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь CamContacts: "
+        send_mess = "Сообщение изменено для демонстрации"
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol5)
     else:
@@ -74,7 +74,7 @@ def vol5(message):
     global camcontacts
     camcontacts = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь VxModels: "
+        send_mess = "Сообщение изменено для демонстрации "
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol6)
     else:
@@ -86,7 +86,7 @@ def vol6(message):
     global vxmodels
     vxmodels = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь Xmodels: "
+        send_mess = "Сообщение изменено для демонстрации"
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol7)
     else:
@@ -98,7 +98,7 @@ def vol7(message):
     global xmodels
     xmodels = message.text
     if message.text.isdigit():
-        send_mess = "Спасибо, теперь SecretFriends: "
+        send_mess = "Сообщение изменено для демонстрации"
         bot.send_message(message.chat.id, send_mess)
         bot.register_next_step_handler(message, vol8)
     else:
@@ -132,22 +132,22 @@ def callback_worker(call):
 # Ответ клиентскому приложению что информация получена
         bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
-        send_mess = "Давай посчитаем exstasy ✏: "
+        send_mess = "Сообщение изменено для демонстрации"
         bot.send_message(call.message.chat.id, send_mess)
         bot.register_next_step_handler(call.message, vol1)
 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-btn1 = types.KeyboardButton('Указать заработок за день 💸')
-btn2 = types.KeyboardButton('Узнать о бонусах 💰')
-btn3 = types.KeyboardButton('FAQ ❓')
+btn1 = types.KeyboardButton('Сообщение изменено для демонстрации')
+btn2 = types.KeyboardButton('Сообщение изменено для демонстрации')
+btn3 = types.KeyboardButton('Сообщение изменено для демонстрации')
 markup.add(btn1, btn2, btn3)
 
 markup3 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-btn1 = types.KeyboardButton('Можно ли курить перед камерой?')
-btn2 = types.KeyboardButton('Я плохо знаю английский, что делать?')
-btn3 = types.KeyboardButton('Хочу уйти на удаленную работу')
-btn4 = types.KeyboardButton('Штрафы')
+btn1 = types.KeyboardButton('Сообщение изменено для демонстрации')
+btn2 = types.KeyboardButton('Сообщение изменено для демонстрации')
+btn3 = types.KeyboardButton('Сообщение изменено для демонстрации')
+btn4 = types.KeyboardButton('Сообщение изменено для демонстрации')
 btn5 = types.KeyboardButton('Назад')
 markup3.add(btn1, btn2, btn3, btn4, btn5)
 
@@ -171,27 +171,27 @@ def foo(message):
     bot.send_message(message.chat.id, send_mess, reply_markup=markup3)
 
 
-@bot.message_handler(func=lambda message: message.text == 'Можно ли курить перед камерой?')
+@bot.message_handler(func=lambda message: message.text == 'Сообщение изменено для демонстрации')
 def foo2(message):
-    final_message = "К сожалению не все сайты одобряют курение моделей перед камерой, а так как наша работа заключена на нескольких сайтах одновременно, то курить перед камерой становится строго запрещено!"
+    final_message = "Сообщение изменено для демонстрации"
     bot.send_message(message.chat.id, final_message, reply_markup=markup3)
 
 
-@bot.message_handler(func=lambda message: message.text == 'Я плохо знаю английский, что делать?')
+@bot.message_handler(func=lambda message: message.text == 'Сообщение изменено для демонстрации')
 def foo3(message):
-    final_message = "Не переживай если тебе приходится много отвлекаться на переводчик, в скором времени у нас в штате будет преподаватель Английского языка, он будет заниматься и обучать нас основам, чтоб бы тебе было комфортно отвечать на банальные вопросы и общаться с несколькими мемберами сразу!"
+    final_message = "Сообщение изменено для демонстрации"
     bot.send_message(message.chat.id, final_message, reply_markup=markup3)
 
 
-@bot.message_handler(func=lambda message: message.text == 'Хочу уйти на удаленную работу')
+@bot.message_handler(func=lambda message: message.text == 'Сообщение изменено для демонстрации')
 def foo4(message):
-    final_message = "Мы с радостью поддерживаем моделей, которые хотят уйти на удаленную работу и не тратить время на поездки в студию. Но чтобы уйти работать удаленно, тебе необходимо выполнить несколько обязательных пунктов: \n 1. Опыт работы на студии Muskad от 1 года и более \n 2. Дома есть оборудованное место (Хотя бы хороший свет и яркая привлекательная комната, ноутбук и камеру мы можем дать в аренду)"
+    final_message = "Сообщение изменено для демонстрации"
     bot.send_message(message.chat.id, final_message, reply_markup=markup3)
 
 
-@bot.message_handler(func=lambda message: message.text == 'Штрафы')
+@bot.message_handler(func=lambda message: message.text == 'Сообщение изменено для демонстрации')
 def foo5(message):
-    final_message = "Прогул рабочего дня наказывается штрафом, как бы сурово это не было, выгоду теряете не только вы. Штраф расчитывается индивидуально и составляет от 3 000р до 6 000р в сутки. Прогул по уважительной причине (есть справка), штрафом не облагается."
+    final_message = "Сообщение изменено для демонстрации"
     bot.send_message(message.chat.id, final_message, reply_markup=markup3)
 
 
@@ -201,9 +201,9 @@ def foo6(message):
     bot.send_message(message.chat.id, final_message, reply_markup=markup)
 
 
-@bot.message_handler(func=lambda message: message.text == "Узнать о бонусах 💰")
+@bot.message_handler(func=lambda message: message.text == "Сообщение изменено для демонстрации")
 def foo7(message):
-    final_message = "У нас действует предложение, если твоя подруга хочет вступить к нам в команду, то мы с радостью рассмотрим ее кандидатуру, а тебе будет положен бонус 5 000₽. Но есть одно условие, твоя подруга должна пройти испытательный срок равный 1 месяцу. "
+    final_message = "Сообщение изменено для демонстрации"
     bot.send_message(message.chat.id, final_message, parse_mode='html', reply_markup=markup)
 
 
