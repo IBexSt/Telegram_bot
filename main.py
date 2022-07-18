@@ -16,6 +16,8 @@ time_send = 0
 rsumma = 0
 shtraf = 0
 owner = 747983713
+review = 0
+
 
 today = date.today()
 firstday = date.today().replace(day=1)
@@ -37,117 +39,152 @@ tconv = lambda x: time.strftime("%d.%m.%Y", time.localtime(x))# Конверта
 
 @bot.message_handler(func=lambda message: message.text == 'Указать заработок за день 💸') # При отправке "Указать заработок", начинается поочередный ввод данных пользователем, в переменные указанные в шапке
 def money(message):
-
     send_mess = "Хорошо, давай посчитаем Exstasy (Euro): "
-    bot.send_message(message.chat.id, send_mess)
+    bot.send_message(message.chat.id, send_mess, reply_markup=reject)
     bot.register_next_step_handler(message, vol1)
 
 
 def vol1(message):
     global exstasy
-    try:
-        exstasy = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь ImLive (Dollar): ")
-        bot.register_next_step_handler(message, vol2)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol1)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            exstasy = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь ImLive (Dollar): ")
+            bot.register_next_step_handler(message, vol2)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol1)
 
 
 def vol2(message):
     global imlive
-    try:
-        imlive = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь MyDirtyHobbies (Euro): ")
-        bot.register_next_step_handler(message, vol3)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol2)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            imlive = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь MyDirtyHobbies (Euro): ")
+            bot.register_next_step_handler(message, vol3)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol2)
 
 
 def vol3(message):
     global mydirtyhobbies
-    try:
-        mydirtyhobbies = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь IsLive (Euro): ")
-        bot.register_next_step_handler(message, vol4)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol3)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            mydirtyhobbies = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь IsLive (Euro): ")
+            bot.register_next_step_handler(message, vol4)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol3)
 
 
 def vol4(message):
     global islive
-    try:
-        islive = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь CamContacts (Dollar): ")
-        bot.register_next_step_handler(message, vol5)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol4)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            islive = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь CamContacts (Dollar): ")
+            bot.register_next_step_handler(message, vol5)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol4)
 
 
 def vol5(message):
     global camcontacts
-    try:
-        camcontacts = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь VxModels (Euro): ")
-        bot.register_next_step_handler(message, vol6)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol5)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            camcontacts = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь VxModels (Euro): ")
+            bot.register_next_step_handler(message, vol6)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol5)
 
 
 def vol6(message):
     global vxmodels
-    try:
-        vxmodels = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь Xmodels (Dollar): ")
-        bot.register_next_step_handler(message, vol7)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol6)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            vxmodels = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь Xmodels (Dollar): ")
+            bot.register_next_step_handler(message, vol7)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol6)
 
 
 def vol7(message):
     global xmodels
-    try:
-        xmodels = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь JasminLive (Dollar): ")
-        bot.register_next_step_handler(message, vol8)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol7)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            xmodels = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь JasminLive (Dollar): ")
+            bot.register_next_step_handler(message, vol8)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol7)
 
 
 def vol8(message):
     global jasmin
-    try:
-        jasmin = float(message.text)
-        bot.send_message(message.chat.id, "Спасибо, теперь SecretFriends (Credits): ")
-        bot.register_next_step_handler(message, vol9)
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol8)
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            jasmin = float(message.text)
+            bot.send_message(message.chat.id, "Спасибо, теперь SecretFriends (Credits): ")
+            bot.register_next_step_handler(message, vol9)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol8)
 
 
 def vol9(message):
     global secretfriends
     global time_send
-    try:
-        secretfriends = float(message.text)
-        keyboard = types.InlineKeyboardMarkup()
-        key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
-        keyboard.add(key_send)
-        key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
-        keyboard.add(key_edit)
-        end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + (" €")  + "\nImLive: " + str(imlive) + (" €") + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + (" €") + "\nIsLive: " + str(islive) + (" €") + "\nCamContacts: " + str(camcontacts) + (" $") + "\nVxModels: " + str(vxmodels) + (" €") + "\nXmodels: " + str(xmodels) + (" $") + "\nSecretFriends: " + str(secretfriends) + (" Credits") + "\nJasminLive: " + str(jasmin) + (" $")
-        bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
-        time_send = tconv(message.date)
-        end_vol = 0
-    except ValueError:
-        bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
-        bot.register_next_step_handler(message, vol8)
+    global review
+    text = message.text
+    if text == 'Отменить':
+        bot.send_message(message.from_user.id, "Переход в главное меню...", reply_markup=markup)
+    else:
+        try:
+            secretfriends = float(message.text)
+            keyboard = types.InlineKeyboardMarkup()
+            key_send = types.InlineKeyboardButton(text="Отправить", callback_data="send")
+            keyboard.add(key_send)
+            key_edit = types.InlineKeyboardButton(text="Редактировать", callback_data="edit")
+            keyboard.add(key_edit)
+            end_vol = "Все верно?\n" + "\nExstasy: " + str(exstasy) + (" €")  + "\nImLive: " + str(imlive) + (" €") + "\nMyDirtyHobbies: " + str(mydirtyhobbies) + (" €") + "\nIsLive: " + str(islive) + (" €") + "\nCamContacts: " + str(camcontacts) + (" $") + "\nVxModels: " + str(vxmodels) + (" €") + "\nXmodels: " + str(xmodels) + (" $") + "\nSecretFriends: " + str(secretfriends) + (" Credits") + "\nJasminLive: " + str(jasmin) + (" $")
+            review = bot.send_message(message.from_user.id, text=end_vol, reply_markup=keyboard)
+            time_send = tconv(message.date)
+        except ValueError:
+            bot.send_message(message.chat.id, "Похоже ты ввела ( , ) вместо ( . ) Исправь пожалуйста")
+            bot.register_next_step_handler(message, vol8)
 
 
 @bot.callback_query_handler(func=lambda call: True)# Обработчик функции callback_data после ответа (Отправить) или (Редактировать)
@@ -162,14 +199,16 @@ def callback_worker(call):
         finmoney = float(exstasy) + float(imlive) + float(mydirtyhobbies) + float(islive) + float(secretfriendsdollar) + float(camcontacts) + float(vxmodels) + float(xmodels) + float(jasmin)
         modelsmoney = float(finmoney) / 2
         rmodelsmoney = round(modelsmoney)
-        bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(rmodelsmoney) + "$")
+        bot.send_message(call.from_user.id, "Поздравляю, за сегодня ты заработала: " + str(rmodelsmoney) + "$", reply_markup=markup)
         m_date = today
         m_nick = call.from_user.username
         m_money = rmodelsmoney
         comment = "null"
         db_table_val(date=m_date, nickname=m_nick, money=m_money, comment=comment)
+        bot.delete_message(call.message.chat.id, message_id=review.id) # Удаляем блок чтобы информацию нельзя было задублировать
     elif call.data == "edit":
-        bot.answer_callback_query(call.id)# Ответ клиентскому приложению что информация получена
+        bot.answer_callback_query(call.id) # Ответ клиентскому приложению что информация получена
+        bot.delete_message(call.message.chat.id, message_id=review.id) # Удаляем блок чтобы информацию нельзя было задублировать
         bot.send_message(call.message.chat.id, "Хорошо, заполним данные заново")
         send_mess = "Давай посчитаем Exstasy ✏: "
         bot.send_message(call.message.chat.id, send_mess)
@@ -206,8 +245,13 @@ btn3 = types.KeyboardButton('Выписать штраф')
 admin.add(btn1, btn2, btn3)
 
 
-#@bot.message_handler(func=lambda message: message.text == "Выписать штраф")
-#def ticket(message, settings=None):
+reject = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+btn1 = types.KeyboardButton('Отменить')
+reject.add(btn1)
+
+
+# @bot.message_handler(func=lambda message: message.text == "Выписать штраф")
+# def ticket(message, settings=None):
 #    m_date = today
 #    m_nick =
 #   m_money = rmodelsmoney
