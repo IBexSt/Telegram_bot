@@ -249,13 +249,26 @@ reject = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn1 = types.KeyboardButton('Отменить')
 reject.add(btn1)
 
-
 # @bot.message_handler(func=lambda message: message.text == "Выписать штраф")
 # def ticket(message, settings=None):
-#    m_date = today
-#    m_nick =
-#   m_money = rmodelsmoney
-#    db_table_val(date=m_date, nickname=m_nick, money=m_money)
+#     keyboard = types.InlineKeyboardMarkup()
+#     key_mod1 = types.InlineKeyboardButton(text="Ирина Худякова", callback_data="Aarriiaannaz")
+#     keyboard.add(key_mod1)
+#     bot.send_message(message.from_user.id, "Выбери имя модели", reply_markup=keyboard)
+#     bot.register_next_step_handler(message.from_user.id, zn1)
+#
+# def zn1(message):
+#     bot.send_message(message.from_user.id, "Впиши сумму на которую модель будет оштрафована")
+#     m_money = message.text
+#
+#
+#     m_date = today
+#     m_nick = message.from_user.id
+#     bot.send_message(message.from_user.id, "Впиши сумму на которую модель будет оштрафована")
+#     m_money = message.text
+#     comentariy = "Прогуляла работу"
+#     db_table_val(date=m_date, nickname=m_nick, money=m_money, comment=comentariy)
+
 
 @bot.message_handler(func=lambda message: message.text == "Ирина Худякова")
 def ikhudakova(message):
